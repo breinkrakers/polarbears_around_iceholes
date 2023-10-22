@@ -1,13 +1,13 @@
 import functools
 import json
 
-from .game import Round, ARound
+from .game import Round
 
 
 
 class json_encoder(json.JSONEncoder):
 	def default(self: object, obj: object) -> dict | str:
-		if type(obj) in [Round, ARound]:
+		if type(obj) == Round:
 			return {"dices": obj.dices}
 		return json.dumps(obj)
 

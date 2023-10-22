@@ -1,6 +1,7 @@
 import functools
 from typing import *
 import random
+import math
 
 
 
@@ -26,6 +27,7 @@ class Dice:
 			return ""  # restart the gen
 
 
+
 def throw_dices(*dices: Dice, width: int = 4, sep: str = " ") -> str:
 	ret = ""
 	while sample := random.sample(dices, min(len(dices), width)):
@@ -48,56 +50,28 @@ class Round:
 	@property
 	def fish(self) -> int:				return sum([7 - x for x in self.dices if x % 2])
 	@property
-	def plancton(self) -> int:			return 0  # TODO
+	def eels(self) -> int:				return sum([math.ceil((7 - x) / 3) for x in self.dices if x in [1, 2, 4]])
+	@property
+	def starfish(self) -> int:			return len([x for x in self.dices if x not in [2, 5]])
+	@property
+	def plancton(self) -> int:			return sum([(x + 1) * 7 - x for x in self.dices if not x % 2])
+
 
 	def __str__(self) -> str:
 		return	self.throw(*[Dice(x) for x in self.dices])		+\
 				f"\tice holes:\t\t{self.ice_holes}\n"			+\
 				f"\tpolar_bears:\t{self.polar_bears}\n"			+\
 				f"\tfish:\t\t\t{self.fish}\n"					+\
+				f"\teels:\t\t\t{self.eels}\n"					+\
+				f"\tstarfish:\t\t{self.starfish}\n"				+\
 				f"\tplancton:\t\t{self.plancton}\n"
 	def __repr__(self) -> str:
 		return f"<dices: {self.dices}>"
 
 
 
-class ARound(Round):
-	"""Analytical Round"""
-	def __init__(self, *args, **kwargs) -> None:
-		super(ARound, self).__init__(*args, **kwargs)
-	@classmethod
-	def from_round(cls, rnd: Round) -> object:
-		a_round = cls(*rnd.dices)
-		a_round.throw = rnd.throw
-		return a_round
-
-	@property
-	def reciprocal(self) -> List[int]:	return [7 - x for x in self.dices]
-	@property
-	def sum(self) -> int:				return sum(self.dices)
-
-	@staticmethod
-	def entry(obj: object, width: int) -> str:	return str(obj).ljust(width, ' ')
-	def __str__(self) -> str:
-		entry = self.entry
-		ih = self.ice_holes
-		pb = self.polar_bears
-		f = self.fish
-		p = self.plancton
-		return	self.throw(*[Dice(x) for x in self.dices])																	+\
-				f" {' '.join([str(x) for x in self.dices])}  ===[FLIP]==>  {' '.join([str(x) for x in self.reciprocal])}\n"	+\
-				f" *           | ice_holes | polar_bears | fish | plancton\n"												+\
-				f" 1           | {entry(ih, 9)} | {entry(pb, 11)} | {entry(f, 4)} | {entry(p, 8)}\n"						+\
-				f" ice_holes   | {entry(ih * ih, 9)} | {entry(pb * ih, 11)} | {entry(f * ih, 4)} | {entry(p * ih, 8)}\n"	+\
-				f" polar_bears | {entry(ih * pb, 9)} | {entry(pb * pb, 11)} | {entry(f * pb, 4)} | {entry(p * pb, 8)}\n"	+\
-				f" fish        | {entry(ih * f, 9)} | {entry(pb * f, 11)} | {entry(f * f, 4)} | {entry(p * f, 8)}\n"		+\
-				f" plancton    | {entry(ih * p, 9)} | {entry(pb * p, 11)} | {entry(f * p, 4)} | {entry(p * p, 8)}\n"		+\
-				f" sum: {self.sum}\n\n"
-
-
-
-def round_gen(dice_count: int = 8, analyzed: bool = False) -> Generator[Round, None, None]:
+def round_gen(dice_count: int = 8) -> Generator[Round, None, None]:
 	while True:
-		args = [random.randint(1, 6) for _ in range(dice_count)]
-		if analyzed:	yield ARound(*args)
-		else:			yield Round(*args)
+		yield Round(
+			*[random.randint(1, 6) for _ in range(dice_count)]
+		)
