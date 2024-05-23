@@ -3,6 +3,10 @@ from typing import *
 import random
 import math
 
+from .polarbears_arround_iceholes import (
+	ice_holes, polar_bears, fish,
+	eels, starfish, plancton
+)  # pre compiled code >:)
 
 
 class Dice:
@@ -44,17 +48,17 @@ class Round:
 		self.throw = functools.partial(throw_dices, width=width, sep=sep)
 
 	@property
-	def ice_holes(self) -> int:			return len([x for x in self.dices if x % 2])
+	def ice_holes(self) -> int:			return ice_holes(self.dices)
 	@property
-	def polar_bears(self) -> int:		return sum([x - 1 for x in self.dices if x % 2])
+	def polar_bears(self) -> int:		return polar_bears(self.dices)
 	@property
-	def fish(self) -> int:				return sum([7 - x for x in self.dices if x % 2])
+	def fish(self) -> int:				return fish(self.dices)
 	@property
-	def eels(self) -> int:				return sum([math.ceil((7 - x) / 3) for x in self.dices if x in [1, 2, 4]])
+	def eels(self) -> int:				return eels(self.dices)
 	@property
-	def starfish(self) -> int:			return len([x for x in self.dices if x not in [2, 5]])
+	def starfish(self) -> int:			return starfish(self.dices)
 	@property
-	def plancton(self) -> int:			return sum([(x + 1) * 7 - x for x in self.dices if not x % 2])
+	def plancton(self) -> int:			return plancton(self.dices)
 
 
 	def __str__(self) -> str:
