@@ -74,8 +74,9 @@ class Round:
 
 
 
-def round_gen(dice_count: int = 8) -> Generator[Round, None, None]:
+def round_gen(dice_count: int = 8, width: int = 4) -> Generator[Round, None, None]:
 	while True:
 		yield Round(
-			*[random.randint(1, 6) for _ in range(dice_count)]
+			*[random.randint(1, 6) for _ in range(dice_count)],
+			width = width
 		)
