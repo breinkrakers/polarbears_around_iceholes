@@ -2,8 +2,8 @@ import math
 
 from polarbears_around_iceholes import *
 from argparse import ArgumentParser, RawTextHelpFormatter
-from rich import print
 from math import sqrt, floor
+from rich import print
 
 
 description =\

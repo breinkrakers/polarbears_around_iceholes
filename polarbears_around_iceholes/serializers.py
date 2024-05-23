@@ -1,3 +1,4 @@
+from math import sqrt, floor
 import functools
 import json
 
@@ -26,7 +27,9 @@ class json_decoder(json.JSONDecoder):
 		super(json_decoder, self).__init__(*args, object_hook=self.default, **kwargs)
 
 	def default(self: object, data: dict) -> object:
-		try:	return Round(*data["dices"])
+		try:
+			cnt = len(data["dices"])
+			return Round(*data["dices"],  width=min(cnt // floor(sqrt(cnt)), 10))
 		except:	pass
 		return data
 
