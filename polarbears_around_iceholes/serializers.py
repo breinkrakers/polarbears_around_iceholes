@@ -8,7 +8,15 @@ from .game import Round
 class json_encoder(json.JSONEncoder):
 	def default(self: object, obj: object) -> dict | str:
 		if type(obj) == Round:
-			return {"dices": obj.dices}
+			return {
+				"dices": obj.dices,
+				"ice_holes": obj.ice_holes,
+				"polar_bears": obj.polar_bears,
+				"fish": obj.fish,
+				"eels": obj.eels,
+				"starfish": obj.starfish,
+				"plancton": obj.plancton
+			}
 		return json.dumps(obj)
 
 

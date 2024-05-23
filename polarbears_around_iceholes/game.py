@@ -63,12 +63,12 @@ class Round:
 
 	def __str__(self) -> str:
 		return	self.throw(*[Dice(x) for x in self.dices])		+\
-				f"\tice holes:\t\t{self.ice_holes}\n"			+\
-				f"\tpolar_bears:\t{self.polar_bears}\n"			+\
-				f"\tfish:\t\t\t{self.fish}\n"					+\
-				f"\teels:\t\t\t{self.eels}\n"					+\
-				f"\tstarfish:\t\t{self.starfish}\n"				+\
-				f"\tplancton:\t\t{self.plancton}\n"
+				f"\tice holes:{' ' * 10}{self.ice_holes}\n"		+\
+				f"\tpolar_bears:{' ' * 8}{self.polar_bears}\n"	+\
+				f"\tfish:{' ' * 15}{self.fish}\n"				+\
+				f"\teels:{' ' * 15}{self.eels}\n"				+\
+				f"\tstarfish:{' ' * 11}{self.starfish}\n"		+\
+				f"\tplancton:{' ' * 11}{self.plancton}\n"
 	def __repr__(self) -> str:
 		return f"<dices: {self.dices}>"
 
